@@ -2,6 +2,7 @@ import json
 import os
 import requests
 from urllib.request import urlopen
+import re
 
 from bs4 import BeautifulSoup
 from selenium import webdriver
@@ -28,8 +29,6 @@ LEAGUE_URL = "https://understat.com/league/EPL"
 TEAM_URL = "https://understat.com/team/"
 PLAYER_URL = "https://understat.com/player/"
 
-
-
 # endregion Constants
 
 # region Entry Point
@@ -52,20 +51,22 @@ def selenium_scraping():
     driver.get(LEAGUE_URL)
     try:
         wait = WebDriverWait(driver, 10)
-        #table = wait.until(EC.presence_of_element_located((By.ID, "league-chemp")))
-        table = wait.until(EC.presence_of_element_located((By.TAG_NAME, "table")))
+        table = wait.until(EC.presence_of_element_located((By.ID, "league-chemp")))
+        # Wait for at least one data row
+        wait.until(EC.presence_of_element_located((By.CSS_SELECTOR, "#league-chemp tbody tr")))
 
+        table = table.find_element(By.TAG_NAME, "table")
         html_table = table.get_attribute("outerHTML")
-        #html_table_block = table.get_attribute("innerHTML")
-        #table_start_index = html_table_block.find("<table")
-        #table_end_index = html_table_block.find("</table>")
-        #html_table = html_table_block[table_start_index:table_end_index + len("</table>")]
 
+        pattern = re.compile(r"(<tr>.*?</tr>)", re.DOTALL)
+        matches = pattern.findall(html_table)
+
+        print(matches)
         teams_list = []
-        name_index = html_table.find("<a href=")
+        #name_index = html_table.find("<a href=")
 
-        while name_index != -1:
-            html_table = html_table[name_index + len("<a href="):]
+        #while name_index != -1:
+        #    html_table = html_table[name_index + len("<a href="):]
 
         print(html_table.find("<a href="))
         print(html_table[1019:1119])
