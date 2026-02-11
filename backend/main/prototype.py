@@ -1,8 +1,9 @@
 import sys
 import os
-sys.path.append(os.path.join(os.path.dirname(__file__), '..', 'src'))
+backend_dir_index = __file__.find("\\backend\\")
+sys.path.append(os.path.join(__file__[:backend_dir_index + len("\\backend\\")], "src"))
 
-import src.understat_scraper as us
+import src.scraping.understat_scraper as us
 
 #TODO: On one occasion, the players list was empty. Fix to ensure the scrape retries (max 3 times?) if unsuccessful.
 
@@ -16,8 +17,7 @@ def main():
         players = us.get_player_names_and_ids(team)
         print(f"{team}:\n{players}")
 
-    #players = us.get_player_names_and_ids(teams[0])
-    #print(players)
+    pass
 
 if __name__ == "__main__":
     main()

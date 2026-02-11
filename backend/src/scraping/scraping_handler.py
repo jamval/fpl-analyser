@@ -1,4 +1,8 @@
+import sys
 import os
+backend_dir_index = __file__.find("\\backend\\")
+sys.path.append(os.path.join(__file__[:backend_dir_index + len("\\backend\\")], "src"))
+
 from urllib.request import urlopen
 
 from selenium import webdriver
@@ -7,14 +11,7 @@ from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 
-# region Constants
-
-DATA_DIR = "datasets\\"
-DEPENDENCIES_DIR = "dependencies\\"
-CHROME_DRIVER_DIR = "chromedriver-win64\\"
-CHROME_DRIVER_EXE = "chromedriver.exe"
-
-# endregion Constants
+from src.utilities.path_handling import backend_path, DATA_DIR, DEPENDENCIES_DIR, CHROME_DRIVER_DIR, CHROME_DRIVER_EXE
 
 # region Variables
 
@@ -40,16 +37,13 @@ def initialise():
     if _initialised:
         return True
 
-    current_dir = os.getcwd()
-    backend_dir = current_dir.rsplit('\\', 1)[0] + '\\'
-
     # Check datasets directory exists.
-    data_dir = backend_dir + DATA_DIR
+    data_dir = os.path.join(backend_path(), DATA_DIR)
     if not os.path.exists(data_dir):
         os.makedirs(data_dir)
 
     # Check dependencies directory exists.
-    dependencies_dir = backend_dir + DEPENDENCIES_DIR
+    dependencies_dir = os.path.join(backend_path(), DEPENDENCIES_DIR)
     if not os.path.exists(dependencies_dir):
         os.makedirs(dependencies_dir)
 
@@ -61,7 +55,7 @@ def initialise():
         print("Unable to find ChromeDriver")
         return False
 
-    chrome_driver_path += CHROME_DRIVER_EXE
+    chrome_driver_path = os.path.join(chrome_driver_path, CHROME_DRIVER_EXE)
 
     # Initialise Selenium webdriver options and service.
     global _chrome_options
@@ -92,7 +86,7 @@ def selenium_scrape(url, locator, locator_value, wait_conditions=None):
         str: The HTML of the specified element.
     """
     if not initialise():
-        print("Scraping handler not yet initialised")
+        print("Scraping handler not initialised")
         return ""
 
     driver = webdriver.Chrome(service=_chrome_service, options=_chrome_options)
