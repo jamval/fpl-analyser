@@ -3,7 +3,6 @@ from urllib.request import urlopen
 
 from selenium import webdriver
 from selenium.webdriver.chrome.service import Service as ChromeService
-from selenium.webdriver.common.by import By
 from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
@@ -33,7 +32,14 @@ def initialise():
     Checks if the datasets and dependencies directories exist, and creates them if they do not. \n
     WIP: Installs correct version of ChromeDriver if it is not already installed. \n
     Initialises Selenium webdriver options and service.
+
+    Returns:
+        bool: True if the scraping handler was successfully initialised, False otherwise.
     """
+    global _initialised
+    if _initialised:
+        return True
+
     current_dir = os.getcwd()
     backend_dir = current_dir.rsplit('\\', 1)[0] + '\\'
 
@@ -53,7 +59,7 @@ def initialise():
 
     if not os.path.exists(chrome_driver_path):
         print("Unable to find ChromeDriver")
-        return
+        return False
 
     chrome_driver_path += CHROME_DRIVER_EXE
 
@@ -65,8 +71,8 @@ def initialise():
     global _chrome_service
     _chrome_service = ChromeService(executable_path=chrome_driver_path)
 
-    global _initialised
     _initialised = True
+    return True
 
 # endregion Initialisation
 
@@ -85,7 +91,7 @@ def selenium_scrape(url, locator, locator_value, wait_conditions=None):
     Returns:
         str: The HTML of the specified element.
     """
-    if not _initialised:
+    if not initialise():
         print("Scraping handler not yet initialised")
         return ""
 
@@ -119,10 +125,6 @@ def html_scrape(url):
     Returns:
         str: The HTML of the webpage.
     """
-    if not _initialised:
-        print("Scraping handler not yet initialised")
-        return ""
-
     page = urlopen(url)
     html_bytes = page.read()
     return html_bytes.decode("utf-8")

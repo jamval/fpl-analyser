@@ -1,15 +1,13 @@
-import src.scraping_handler as sh
+import sys
+import os
+sys.path.append(os.path.join(os.path.dirname(__file__), '..', 'src'))
+
+import src.understat_scraper as us
 
 # region Entry Point
 
 def main():
-    sh.initialise()
-
-    for i in range(0):
-        print("hi")
-
-    for i in range(1):
-        print("hello")
+    print(us.get_team_names())
 
 if __name__ == "__main__":
     main()
