@@ -57,6 +57,7 @@ def selenium_scraping():
 
         table = table.find_element(By.TAG_NAME, "table")
         html_table = table.get_attribute("outerHTML")
+        print(html_table)
 
         #TODO: similar thing for each cell in row
         pattern = re.compile(r"(<tr>.*?</tr>)", re.DOTALL)
@@ -73,14 +74,14 @@ def selenium_scraping():
 
 
         #print(matches)
-        teams_list = []
+        #teams_list = []
         #name_index = html_table.find("<a href=")
 
         #while name_index != -1:
         #    html_table = html_table[name_index + len("<a href="):]
 
-        print(html_table.find("<a href="))
-        print(html_table[1019:1119])
+        # print(html_table.find("<a href="))
+        # print(html_table[1019:1119])
     except Exception as e:
         print(e)
     finally:
