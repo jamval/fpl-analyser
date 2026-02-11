@@ -58,10 +58,21 @@ def selenium_scraping():
         table = table.find_element(By.TAG_NAME, "table")
         html_table = table.get_attribute("outerHTML")
 
+        #TODO: similar thing for each cell in row
         pattern = re.compile(r"(<tr>.*?</tr>)", re.DOTALL)
-        matches = pattern.findall(html_table)
+        rows = pattern.findall(html_table)
 
-        print(matches)
+        for row in rows[1:]:
+            pattern = re.compile(r"(<td.*?</td>)", re.DOTALL)
+            cells = pattern.findall(row)
+            print(cells)
+            #TODO: Sort out
+            # Team name
+            pattern = re.compile(r'2025">(.*?)</a>')
+            print(pattern.findall(cells[1]))
+
+
+        #print(matches)
         teams_list = []
         #name_index = html_table.find("<a href=")
 
