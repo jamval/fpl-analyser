@@ -44,6 +44,6 @@ def get_player_summary(player_id: int):
 
 
 if __name__ == "__main__":
-    data = get_bootstrap_static()
-    with open("bootstrap.json", "w") as out:
+    data = get_player_summary(1)
+    with open("player_1.json", "w") as out:
         json.dump(data, out, indent=4)
