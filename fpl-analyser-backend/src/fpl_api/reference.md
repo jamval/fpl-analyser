@@ -190,3 +190,5 @@ URL:https://fantasy.premierleague.com/api/element-summary/{{player_id}}/
 Returns a player's upcoming fixtures, a history of completed gws, and a summary from previous seasons.
 
 TODO
+
+## Event Status
