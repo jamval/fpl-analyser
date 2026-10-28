@@ -27,7 +27,7 @@ def make_request(url: str, params: dict[str, str] | None = None):
 
 
 def get_bootstrap_static():
-    return make_request("https://fantasy.premierleague.com/api/bootstrap-static/")
+    return make_request(BOOTSTRAP_STATIC_URL)
 
 
 def get_fixtures(gw_id: int | None = None):
